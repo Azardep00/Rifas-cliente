@@ -6,12 +6,7 @@ import { Routes } from '@angular/router';
  */
 export const routes: Routes = [
   { path: '', title: 'Alex Rifas', loadComponent: () => import('./pages/inicio').then((m) => m.Inicio) },
-  {
-    path: 'rifa/:codigo',
-    title: 'Rifa',
-    data: { cp: 12, pantalla: 'Detalle de la rifa' },
-    loadComponent: () => import('./pages/pendiente').then((m) => m.Pendiente),
-  },
+  { path: 'rifa/:codigo', title: 'Rifa', loadComponent: () => import('./pages/detalle').then((m) => m.Detalle) },
   {
     path: 'rifa/:codigo/reservar',
     title: 'Reservar números',

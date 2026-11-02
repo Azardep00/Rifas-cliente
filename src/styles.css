@@ -1,0 +1,115 @@
+/*
+ * Tokens de diseño de Alex Rifas. Motivo: el boleto de talonario (talón + cuerpo + perforación).
+ * Los componentes NO usan colores sueltos: solo estas variables. Modo oscuro automático.
+ */
+:root {
+  --papel: #f2f5f9;
+  --superficie: #ffffff;
+  --tinta: #101b3b;
+  --tinta-suave: #47516b;
+  --linea: #d5dbe6;
+  --accion: #2447d6;
+  --accion-texto: #ffffff;
+  --sol: #f5c518;          /* número seleccionado */
+  --sol-texto: #101b3b;
+  --ambar: #c77d0a;        /* número reservado */
+  --vendido: #9aa3b5;      /* número vendido */
+  --error: #b3261e;
+  --ok: #1b7a43;
+
+  --fuente-titulo: 'Bricolage Grotesque Variable', 'Segoe UI', system-ui, sans-serif;
+  --fuente-texto: 'Figtree Variable', 'Segoe UI', system-ui, sans-serif;
+
+  --t-1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --t0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --t1: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --t2: clamp(1.75rem, 1.5rem + 1.2vw, 2.5rem);
+  --t3: clamp(2.5rem, 1.9rem + 3vw, 4.5rem);
+
+  --e1: 0.25rem; --e2: 0.5rem; --e3: 1rem; --e4: 1.5rem; --e5: 2.5rem; --e6: 4rem;
+  --radio: 0.75rem;
+  --ancho: 72rem;
+  --gutter: max(1rem, 4vw);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --papel: #0c1226;
+    --superficie: #141c38;
+    --tinta: #eaf0ff;
+    --tinta-suave: #a9b4d0;
+    --linea: #2a3558;
+    --accion: #8da2ff;
+    --accion-texto: #0c1226;
+    --ambar: #e0a03a;
+    --vendido: #5d6685;
+    --error: #ff8a80;
+    --ok: #5fd08a;
+  }
+}
+
+:root[data-theme='dark'] {
+  --papel: #0c1226;
+  --superficie: #141c38;
+  --tinta: #eaf0ff;
+  --tinta-suave: #a9b4d0;
+  --linea: #2a3558;
+  --accion: #8da2ff;
+  --accion-texto: #0c1226;
+  --ambar: #e0a03a;
+  --vendido: #5d6685;
+  --error: #ff8a80;
+  --ok: #5fd08a;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fuente-texto);
+  font-size: var(--t0);
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+}
+
+h1, h2, h3 {
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--e3);
+  text-wrap: balance;
+}
+h1 { font-size: var(--t3); }
+h2 { font-size: var(--t2); }
+h3 { font-size: var(--t1); }
+p { margin: 0 0 var(--e3); max-width: 62ch; }
+
+a { color: var(--accion); text-underline-offset: 0.2em; }
+
+:focus-visible { outline: 3px solid var(--accion); outline-offset: 3px; border-radius: 4px; }
+
+.contenedor { width: min(var(--ancho), 100% - 2 * var(--gutter)); margin-inline: auto; }
+
+.boton {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 2.75rem; padding: 0.5rem 1.25rem;
+  border: 0; border-radius: var(--radio);
+  background: var(--accion); color: var(--accion-texto);
+  font: 600 var(--t0) var(--fuente-texto); text-decoration: none; cursor: pointer;
+}
+.boton:hover { filter: brightness(1.08); }
+.boton--secundario { background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 2px var(--linea); }
+
+.solo-lectores {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

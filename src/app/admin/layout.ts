@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Sesion } from '../core/auth/sesion';
 
@@ -19,7 +19,7 @@ import { Sesion } from '../core/auth/sesion';
     </header>
     <main id="contenido" tabindex="-1"><router-outlet /></main>
     <nav class="abajo" aria-label="Panel">
-      @for (s of secciones; track s.ruta) {
+      @for (s of secciones(); track s.ruta) {
         <a [routerLink]="s.ruta" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: s.ruta === '/admin' }">{{ s.texto }}</a>
       }
     </nav>
@@ -47,10 +47,12 @@ import { Sesion } from '../core/auth/sesion';
 export class AdminLayout {
   readonly sesion = inject(Sesion);
   private readonly router = inject(Router);
-  readonly secciones = [
+  /** Pagos es solo de ADMIN: la API de cobros lo exige, así que al organizador ni se le muestra. */
+  readonly secciones = computed(() => [
     { ruta: '/admin', texto: 'Resumen' },
     { ruta: '/admin/rifas', texto: 'Rifas' },
-  ];
+    ...(this.sesion.rol() === 'ADMIN' ? [{ ruta: '/admin/pagos', texto: 'Pagos' }] : []),
+  ]);
 
   salir(): void {
     this.sesion.salir().subscribe(() => void this.router.navigate(['/admin/login']));

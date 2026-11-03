@@ -24,3 +24,9 @@ export const soloSinSesionGuard: CanActivateFn = () => {
   const sesion = inject(Sesion);
   return sesion.esDelPanel() ? inject(Router).createUrlTree(['/admin']) : true;
 };
+
+/** Rutas solo de ADMIN (la API de pagos y sorteo lo exige). Un organizador vuelve al resumen. */
+export const adminMatch: CanMatchFn = () => {
+  const sesion = inject(Sesion);
+  return sesion.tieneRol(['ADMIN']) ? true : inject(Router).createUrlTree(['/admin']);
+};

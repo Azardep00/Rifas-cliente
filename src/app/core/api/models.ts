@@ -196,3 +196,38 @@ export interface RifaGestion {
   reglaVacante?: ReglaVacante;
   reservaMinutos: number;
 }
+
+/** Fila de la cola de pagos (`CompraAdminDto`). El teléfono llega completo con prefijo, p. ej. "+573001234567". */
+export interface CompraAdmin {
+  codigo: string;
+  codigoRifa: string | null;
+  estado: EstadoCompra;
+  compradorNombre: string | null;
+  compradorTelefono: string | null;
+  usuarioId: number | null;
+  numeros: number[];
+  subtotal: number;
+  moneda: string | null;
+  expiraEn: string;
+  creadaEn: string;
+  actualizadaEn: string;
+}
+
+export interface ConfirmacionManualRequest {
+  metodo: string;
+  observacion?: string;
+}
+
+export interface ConfirmacionPago {
+  codigoCompra: string;
+  estado: EstadoCompra;
+  referenciaPago: string;
+  confirmadoEn: string;
+}
+
+export interface Liberacion {
+  codigo: string;
+  estado: EstadoCompra;
+  boletosLiberados: number;
+  liberadaEn: string;
+}

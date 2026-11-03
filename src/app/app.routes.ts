@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { panelMatch, soloSinSesionGuard } from './core/auth/guards';
+import { adminMatch, panelMatch, soloSinSesionGuard } from './core/auth/guards';
 
 /**
  * Mapa de rutas públicas del plan (sección 4). Cada pantalla se carga perezosa.
@@ -20,6 +20,7 @@ export const routes: Routes = [
     children: [
       { path: '', title: 'Resumen · Panel', loadComponent: () => import('./admin/resumen').then((m) => m.AdminResumen) },
       { path: 'rifas', title: 'Rifas · Panel', loadComponent: () => import('./admin/rifas').then((m) => m.AdminRifas) },
+      { path: 'pagos', title: 'Pagos · Panel', canMatch: [adminMatch], loadComponent: () => import('./admin/pagos').then((m) => m.AdminPagos) },
       { path: 'rifas/nueva', title: 'Nueva rifa · Panel', loadComponent: () => import('./admin/rifa-wizard').then((m) => m.RifaWizard) },
     ],
   },

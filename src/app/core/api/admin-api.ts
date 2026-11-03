@@ -2,7 +2,20 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE } from './api.service';
-import { Loteria, Pagina, Premio, PremioRequest, RifaGestion, RifaRequest } from './models';
+import {
+  CompraAdmin, ConfirmacionManualRequest, ConfirmacionPago, EstadoCompra, Liberacion, Loteria, Pagina, Premio,
+  PremioRequest, RifaGestion, RifaRequest,
+} from './models';
+
+/** Filtros de la cola de pagos; todo es opcional. */
+export interface FiltroCompras {
+  estado?: EstadoCompra;
+  rifa?: string;
+  telefono?: string;
+  numero?: number;
+  pagina?: number;
+  tamano?: number;
+}
 
 /** Endpoints de gestión. Van bajo /api/organizador/** (ORGANIZADOR o ADMIN); el interceptor pone el Bearer. */
 @Injectable({ providedIn: 'root' })
@@ -28,5 +41,23 @@ export class AdminApi {
 
   loteriasActivas(): Observable<Loteria[]> {
     return this.http.get<Loteria[]>(`${API_BASE}/organizador/loterias`);
+  }
+
+  /** Cola de pagos (solo ADMIN en la API): `/api/admin/compras`. */
+  compras(f: FiltroCompras): Observable<Pagina<CompraAdmin>> {
+    let params = new HttpParams().set('pagina', f.pagina ?? 0).set('tamano', f.tamano ?? 20);
+    if (f.estado) params = params.set('estado', f.estado);
+    if (f.rifa) params = params.set('rifa', f.rifa);
+    if (f.telefono) params = params.set('telefono', f.telefono);
+    if (f.numero !== undefined) params = params.set('numero', f.numero);
+    return this.http.get<Pagina<CompraAdmin>>(`${API_BASE}/admin/compras`, { params });
+  }
+
+  confirmarPago(codigo: string, r: ConfirmacionManualRequest): Observable<ConfirmacionPago> {
+    return this.http.post<ConfirmacionPago>(`${API_BASE}/admin/compras/${encodeURIComponent(codigo)}/confirmar-pago-manual`, r);
+  }
+
+  liberar(codigo: string, motivo?: string): Observable<Liberacion> {
+    return this.http.post<Liberacion>(`${API_BASE}/admin/compras/${encodeURIComponent(codigo)}/liberar`, motivo ? { motivo } : {});
   }
 }

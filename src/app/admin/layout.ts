@@ -20,7 +20,7 @@ import { Sesion } from '../core/auth/sesion';
     <main id="contenido" tabindex="-1"><router-outlet /></main>
     <nav class="abajo" aria-label="Panel">
       @for (s of secciones; track s.ruta) {
-        <a [routerLink]="s.ruta" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">{{ s.texto }}</a>
+        <a [routerLink]="s.ruta" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: s.ruta === '/admin' }">{{ s.texto }}</a>
       }
     </nav>
   `,
@@ -47,7 +47,10 @@ import { Sesion } from '../core/auth/sesion';
 export class AdminLayout {
   readonly sesion = inject(Sesion);
   private readonly router = inject(Router);
-  readonly secciones = [{ ruta: '/admin', texto: 'Resumen' }];
+  readonly secciones = [
+    { ruta: '/admin', texto: 'Resumen' },
+    { ruta: '/admin/rifas', texto: 'Rifas' },
+  ];
 
   salir(): void {
     this.sesion.salir().subscribe(() => void this.router.navigate(['/admin/login']));

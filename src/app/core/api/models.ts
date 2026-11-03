@@ -134,3 +134,65 @@ export interface AuthResponse {
   expiraEnSegundos: number;
   usuario: UsuarioResumen;
 }
+
+/** Gestión (CP-17): espejo de RifaDtos.RifaRequest / PremioRequest / RifaGestionDto y LoteriaDtos.LoteriaDto. */
+export type TipoLoteria = 'LOTERIA' | 'CHANCE';
+
+export interface Loteria {
+  id: number;
+  nombre: string;
+  tipo: TipoLoteria;
+  diasSemana: number[];
+  horaSorteo?: string;
+  sitioOficialUrl?: string;
+  activa: boolean;
+}
+
+export interface RifaRequest {
+  titulo: string;
+  descripcion?: string;
+  imagenUrl?: string;
+  precioBoleto: number;
+  moneda: string;
+  cantidadBoletos: number;
+  fechaSorteo: string;
+  cierreVentasEn: string;
+  maximoBoletosPorCompra: number;
+  metodoSorteo: MetodoSorteo;
+  loteriaNombre?: string;
+  numeroAutorizacion?: string;
+  entidadAutorizadora?: string;
+  loteriaId?: number;
+  digitos?: number;
+  reglaVacante?: ReglaVacante;
+  reservaMinutos?: number;
+}
+
+export interface PremioRequest {
+  posicion: number;
+  nombre: string;
+  descripcion?: string;
+  valorEstimado?: number;
+  imagenUrl?: string;
+}
+
+export interface RifaGestion {
+  id: number;
+  codigo: string;
+  titulo: string;
+  estado: EstadoRifa;
+  precioBoleto: number;
+  moneda: string;
+  cantidadBoletos: number;
+  fechaSorteo: string;
+  cierreVentasEn: string;
+  maximoBoletosPorCompra: number;
+  metodoSorteo: MetodoSorteo;
+  numeroAutorizacion?: string;
+  entidadAutorizadora?: string;
+  disponibilidad: Disponibilidad;
+  loteriaId?: number;
+  digitos?: number;
+  reglaVacante?: ReglaVacante;
+  reservaMinutos: number;
+}

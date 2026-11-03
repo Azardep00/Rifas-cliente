@@ -17,7 +17,11 @@ export const routes: Routes = [
     path: 'admin',
     canMatch: [panelMatch],
     loadComponent: () => import('./admin/layout').then((m) => m.AdminLayout),
-    children: [{ path: '', title: 'Resumen · Panel', loadComponent: () => import('./admin/resumen').then((m) => m.AdminResumen) }],
+    children: [
+      { path: '', title: 'Resumen · Panel', loadComponent: () => import('./admin/resumen').then((m) => m.AdminResumen) },
+      { path: 'rifas', title: 'Rifas · Panel', loadComponent: () => import('./admin/rifas').then((m) => m.AdminRifas) },
+      { path: 'rifas/nueva', title: 'Nueva rifa · Panel', loadComponent: () => import('./admin/rifa-wizard').then((m) => m.RifaWizard) },
+    ],
   },
   { path: '**', title: 'No encontrada', loadComponent: () => import('./pages/no-encontrada').then((m) => m.NoEncontrada) },
 ];

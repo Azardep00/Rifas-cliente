@@ -1,0 +1,11 @@
+{
+  "name": "alex-rifas-e2e",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "instalar-navegador": "playwright install --with-deps chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

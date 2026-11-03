@@ -8,6 +8,7 @@ import {
   etiquetaEstadoRifa, formatearDuracion, formatearFechaHora, formatearMoneda,
 } from '../core/formato';
 import { AvisoCarga } from '../shared/aviso-carga';
+import { GrillaRifa } from '../shared/grilla-rifa';
 import { Progreso } from '../shared/progreso';
 
 /** Texto público de la regla de cupo vacío (ADR-07: debe conocerse antes de comprar). Refleja las reglas del CP-09. */
@@ -20,7 +21,7 @@ const REGLAS: Record<ReglaVacante, string> = {
 
 @Component({
   selector: 'app-detalle',
-  imports: [RouterLink, AvisoCarga, Progreso],
+  imports: [RouterLink, AvisoCarga, Progreso, GrillaRifa],
   template: `
     <section class="contenedor">
       <a class="volver" routerLink="/">Todas las rifas</a>
@@ -36,6 +37,10 @@ const REGLAS: Record<ReglaVacante, string> = {
             <div class="principal">
               @if (r.imagenUrl) { <img class="foto" [src]="r.imagenUrl" alt="" loading="lazy" /> }
               @if (r.descripcion) { <p class="descripcion">{{ r.descripcion }}</p> }
+
+              <div id="numeros" class="zona-numeros">
+                <app-grilla-rifa [rifa]="r" />
+              </div>
 
               <h2>Premios</h2>
               <ol class="premios">
@@ -80,7 +85,7 @@ const REGLAS: Record<ReglaVacante, string> = {
 
               @switch (r.estado) {
                 @case ('PUBLICADA') {
-                  <a class="boton" [routerLink]="['/rifa', r.codigo, 'reservar']">Escoger números</a>
+                  <a class="boton" [routerLink]="['/rifa', r.codigo]" fragment="numeros">Escoger números</a>
                   <p class="nota">Tu reserva dura {{ duracion() }}. Si en ese tiempo no se confirma el pago, los números vuelven a quedar libres.</p>
                 }
                 @case ('SORTEADA') { <a class="boton" [routerLink]="['/resultados', r.codigo]">Ver resultados</a> }
@@ -100,6 +105,7 @@ const REGLAS: Record<ReglaVacante, string> = {
     .estado.abierta { color: var(--ok); }
     .columnas { display: grid; gap: var(--e5); align-items: start; padding-bottom: var(--e6); }
     @media (min-width: 56rem) { .columnas { grid-template-columns: 1fr 22rem; } .panel { position: sticky; top: var(--e4); } }
+    .zona-numeros { scroll-margin-top: var(--e4); }
     .foto { width: 100%; max-height: 24rem; object-fit: cover; border-radius: var(--radio); margin-bottom: var(--e4); }
     .descripcion { white-space: pre-line; }
     h2 { font-size: var(--t1); margin-top: var(--e5); }

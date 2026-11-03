@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Carrito, ConfigCarrito, formatearDinero } from './carrito';
+import { Carrito, ConfigCarrito } from './carrito';
 
 const RIFA: ConfigCarrito = { codigo: 'R1', precio: 10000, moneda: 'COP', maximo: 3, digitos: 3 };
 
@@ -111,14 +111,5 @@ describe('Carrito', () => {
     carrito.vaciar();
     expect(carrito.numeros()).toEqual([]);
     expect(sessionStorage.getItem('alex-rifas:carrito')).toBeNull();
-  });
-});
-
-describe('formatearDinero', () => {
-  it('da formato colombiano sin decimales', () => {
-    expect(formatearDinero(30000, 'COP').replace(/\s/g, '')).toBe('$30.000');
-  });
-  it('con una moneda inválida no lanza', () => {
-    expect(formatearDinero(5, 'XX')).toContain('5');
   });
 });

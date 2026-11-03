@@ -16,7 +16,16 @@ describe('Detalle', () => {
     f.componentRef.setInput('codigo', 'R-001');
     f.detectChanges();
     http.expectOne('/api/rifas/R-001').flush(respuesta as object, opts);
+    f.detectChanges();
+    TestBed.tick();
+    // La grilla (CP-13) pide los números tras un tic: se responde para que la pantalla quede estable.
+    await new Promise((r) => setTimeout(r, 0));
+    http.match('/api/rifas/R-001/boletos').forEach((req) => req.flush(grillaVacia));
     await f.whenStable();
+  };
+  const grillaVacia = {
+    codigoRifa: 'R-001', cantidad: 100, digitos: 2, estados: 'L'.repeat(100), libres: 100, reservados: 0, vendidos: 0,
+    generadaEn: '2026-11-02T00:00:00Z',
   };
 
   afterEach(() => http.verify());
@@ -36,10 +45,12 @@ describe('Detalle', () => {
     expect(texto()).toContain('gana el siguiente número vendido');
   });
 
-  it('rifa publicada: botón para escoger números hacia /reservar', async () => {
+  it('rifa publicada: el botón lleva a la grilla de números de la misma página', async () => {
     await montar(detalle());
-    const a = (f.nativeElement as HTMLElement).querySelector('a.boton');
-    expect(a?.getAttribute('href')).toBe('/rifa/R-001/reservar');
+    const el = f.nativeElement as HTMLElement;
+    expect(el.querySelector('a.boton')?.getAttribute('href')).toBe('/rifa/R-001#numeros');
+    expect(el.querySelector('#numeros app-grilla-rifa')).toBeTruthy();
+    expect(el.querySelectorAll('#numeros button[data-n]')).toHaveLength(100);
   });
 
   it('rifa sorteada: lleva a resultados y no ofrece reservar', async () => {

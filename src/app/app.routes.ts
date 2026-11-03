@@ -7,18 +7,8 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   { path: '', title: 'Alex Rifas', loadComponent: () => import('./pages/inicio').then((m) => m.Inicio) },
   { path: 'rifa/:codigo', title: 'Rifa', loadComponent: () => import('./pages/detalle').then((m) => m.Detalle) },
-  {
-    path: 'rifa/:codigo/reservar',
-    title: 'Reservar números',
-    data: { cp: 14, pantalla: 'Reservar números' },
-    loadComponent: () => import('./pages/pendiente').then((m) => m.Pendiente),
-  },
-  {
-    path: 'reserva/:codigo',
-    title: 'Tu reserva',
-    data: { cp: 14, pantalla: 'Estado de tu reserva' },
-    loadComponent: () => import('./pages/pendiente').then((m) => m.Pendiente),
-  },
+  { path: 'rifa/:codigo/reservar', title: 'Reservar números', loadComponent: () => import('./pages/reservar').then((m) => m.Reservar) },
+  { path: 'reserva/:codigo', title: 'Tu reserva', loadComponent: () => import('./pages/reserva').then((m) => m.Reserva) },
   {
     path: 'mis-boletos',
     title: 'Mis boletos',

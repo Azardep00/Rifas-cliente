@@ -1,7 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { formatearNumero } from '../core/boletos';
-import { Carrito, formatearDinero } from '../core/carrito';
+import { Carrito } from '../core/carrito';
+import { formatearMoneda } from '../core/formato';
 
 /** Barra fija al pie con la selección: números (se pueden quitar), total y paso al checkout (CP-14). */
 @Component({
@@ -70,7 +71,7 @@ import { Carrito, formatearDinero } from '../core/carrito';
 export class CarritoFlotante {
   protected readonly carrito = inject(Carrito);
 
-  protected readonly total = computed(() => formatearDinero(this.carrito.total(), this.carrito.config()?.moneda ?? 'COP'));
+  protected readonly total = computed(() => formatearMoneda(this.carrito.total(), this.carrito.config()?.moneda ?? 'COP'));
 
   protected texto(numero: number): string {
     return formatearNumero(numero, this.carrito.config()?.digitos);

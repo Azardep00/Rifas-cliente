@@ -14,15 +14,6 @@ export type ResultadoAlternar = 'agregado' | 'quitado' | 'lleno' | 'sin-rifa';
 
 const CLAVE_ALMACEN = 'alex-rifas:carrito';
 
-/** 30000 + 'COP' -> "$ 30.000" (sin decimales: los precios de boleto son enteros). */
-export function formatearDinero(valor: number, moneda: string): string {
-  try {
-    return new Intl.NumberFormat('es-CO', { style: 'currency', currency: moneda, maximumFractionDigits: 0 }).format(valor);
-  } catch {
-    return `${valor} ${moneda}`; // código de moneda inválido: no romper la pantalla
-  }
-}
-
 /**
  * Selección de números de UNA rifa a la vez. Vive en la raíz porque el checkout (CP-14, otra ruta)
  * la lee. Se guarda en sessionStorage para sobrevivir a un F5, pero la grilla la reconcilia

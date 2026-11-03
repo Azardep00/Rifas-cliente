@@ -115,3 +115,22 @@ export interface ErrorDto {
   mensaje: string;
   ruta: string;
 }
+
+/** Autenticación (AuthDtos.java). */
+export type Rol = 'ADMIN' | 'ORGANIZADOR' | 'CLIENTE';
+
+export interface UsuarioResumen {
+  id: number;
+  nombre: string;
+  apellido: string;
+  correo: string;
+  rol: Rol;
+}
+
+export interface AuthResponse {
+  tipo: string;
+  accessToken: string;
+  refreshToken: string;
+  expiraEnSegundos: number;
+  usuario: UsuarioResumen;
+}

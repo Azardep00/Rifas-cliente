@@ -17,7 +17,7 @@ describe('App', () => {
 
   it('declara todas las rutas públicas del plan', () => {
     const paths = routes.map((r) => r.path);
-    for (const p of ['', 'rifa/:codigo', 'rifa/:codigo/reservar', 'reserva/:codigo', 'mis-boletos', 'resultados/:codigo']) {
+    for (const p of ['admin', 'admin/login', '', 'rifa/:codigo', 'rifa/:codigo/reservar', 'reserva/:codigo', 'mis-boletos', 'resultados/:codigo']) {
       expect(paths).toContain(p);
     }
   });

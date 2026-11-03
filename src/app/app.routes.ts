@@ -9,17 +9,7 @@ export const routes: Routes = [
   { path: 'rifa/:codigo', title: 'Rifa', loadComponent: () => import('./pages/detalle').then((m) => m.Detalle) },
   { path: 'rifa/:codigo/reservar', title: 'Reservar números', loadComponent: () => import('./pages/reservar').then((m) => m.Reservar) },
   { path: 'reserva/:codigo', title: 'Tu reserva', loadComponent: () => import('./pages/reserva').then((m) => m.Reserva) },
-  {
-    path: 'mis-boletos',
-    title: 'Mis boletos',
-    data: { cp: 15, pantalla: 'Mis boletos' },
-    loadComponent: () => import('./pages/pendiente').then((m) => m.Pendiente),
-  },
-  {
-    path: 'resultados/:codigo',
-    title: 'Resultados',
-    data: { cp: 15, pantalla: 'Resultados y ganadores' },
-    loadComponent: () => import('./pages/pendiente').then((m) => m.Pendiente),
-  },
+  { path: 'mis-boletos', title: 'Mis boletos', loadComponent: () => import('./pages/mis-boletos').then((m) => m.MisBoletos) },
+  { path: 'resultados/:codigo', title: 'Resultados', loadComponent: () => import('./pages/resultados').then((m) => m.Resultados) },
   { path: '**', title: 'No encontrada', loadComponent: () => import('./pages/no-encontrada').then((m) => m.NoEncontrada) },
 ];

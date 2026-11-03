@@ -1,5 +1,5 @@
 import { CONFIG_PAGO, enlaceWhatsapp, whatsappValido } from './config-pago';
-import { guardarTelefono, telefonoGuardado } from './reservas-locales';
+import { guardarTelefono, olvidarReserva, reservasGuardadas, telefonoGuardado } from './reservas-locales';
 
 describe('reservas-locales', () => {
   beforeEach(() => localStorage.clear());
@@ -24,6 +24,29 @@ describe('reservas-locales', () => {
     guardarTelefono('A', '3001234567');
     expect(telefonoGuardado('A')).toBe('3001234567');
   });
+
+  it('lista las reservas con la más reciente primero', () => {
+    guardarTelefono('A', '3001234567');
+    guardarTelefono('B', '3011234567');
+    guardarTelefono('A', '3001234567'); // reinsertar la deja como la más reciente
+    expect(reservasGuardadas().map((r) => r.codigo)).toEqual(['A', 'B']);
+    expect(reservasGuardadas()).toEqual([
+      { codigo: 'A', telefono: '3001234567' },
+      { codigo: 'B', telefono: '3011234567' },
+    ]);
+  });
+  it('olvidarReserva borra solo esa reserva y tolera la que no existe', () => {
+    guardarTelefono('A', '3001234567');
+    guardarTelefono('B', '3011234567');
+    olvidarReserva('A');
+    olvidarReserva('NO-EXISTE');
+    expect(telefonoGuardado('A')).toBeNull();
+    expect(telefonoGuardado('B')).toBe('3011234567');
+  });
+  it('sin reservas guardadas, la lista está vacía', () => {
+    expect(reservasGuardadas()).toEqual([]);
+  });
+
 });
 
 describe('config-pago', () => {

@@ -29,3 +29,20 @@ export function guardarTelefono(codigo: string, telefono: string): void {
 export function telefonoGuardado(codigo: string): string | null {
   return leer()[codigo] ?? null;
 }
+
+/** Reservas hechas desde este navegador, la más reciente primero. */
+export function reservasGuardadas(): { codigo: string; telefono: string }[] {
+  return Object.entries(leer())
+    .map(([codigo, telefono]) => ({ codigo, telefono }))
+    .reverse();
+}
+
+export function olvidarReserva(codigo: string): void {
+  try {
+    const todo = leer();
+    delete todo[codigo];
+    localStorage.setItem(CLAVE, JSON.stringify(todo));
+  } catch {
+    /* almacenamiento bloqueado: no hay nada que olvidar */
+  }
+}

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main, v2]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Pruebas (Vitest)
+        run: npm test -- --no-watch
+      - name: Build de producción (ng build)
+        run: npm run build
+      - name: Aviso si vercel.json sigue con el host de ejemplo
+        run: |
+          if grep -q "REEMPLAZAR-HOST-DE-LA-API" vercel.json; then
+            echo "::warning file=vercel.json::Falta reemplazar el host de la API antes de desplegar en Vercel."
+          fi

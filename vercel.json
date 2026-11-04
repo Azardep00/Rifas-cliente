@@ -7,10 +7,10 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://REEMPLAZAR-HOST-DE-LA-API.example.com/api/:path*"
+      "destination": "https://alex-rifas-api.onrender.com/api/:path*"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/index.html",
       "destination": "/index.html"
     }
   ],

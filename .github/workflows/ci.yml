@@ -33,3 +33,30 @@ jobs:
           if grep -q "REEMPLAZAR-HOST-DE-LA-API" vercel.json; then
             echo "::warning file=vercel.json::Falta reemplazar el host de la API antes de desplegar en Vercel."
           fi
+
+  # Flujo crítico en navegador real (Pixel 5 y escritorio) contra el build de producción, con la CSP de vercel.json.
+  e2e:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build de producción
+        run: npm ci && npm run build
+      - name: Instalar Playwright y Chromium
+        working-directory: e2e
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: e2e
+        working-directory: e2e
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: informe-e2e
+          path: e2e/playwright-report
+          retention-days: 7
+

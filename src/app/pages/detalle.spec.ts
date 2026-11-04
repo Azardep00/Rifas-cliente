@@ -28,6 +28,9 @@ describe('Detalle', () => {
     generadaEn: '2026-11-02T00:00:00Z',
   };
 
+  // El carrito vive en sessionStorage y otros specs lo dejan lleno: sin limpiarlo, su botón «Reservar» aparece antes
+  // que el del panel y el resultado dependía del orden de ejecución.
+  beforeEach(() => { sessionStorage.clear(); localStorage.clear(); });
   afterEach(() => http.verify());
 
   it('rifa por lotería: premios, dígitos y la regla de cupo vacío visibles', async () => {
@@ -48,14 +51,14 @@ describe('Detalle', () => {
   it('rifa publicada: el botón lleva a la grilla de números de la misma página', async () => {
     await montar(detalle());
     const el = f.nativeElement as HTMLElement;
-    expect(el.querySelector('a.boton')?.getAttribute('href')).toBe('/rifa/R-001#numeros');
+    expect(el.querySelector('.panel a.boton')?.getAttribute('href')).toBe('/rifa/R-001#numeros');
     expect(el.querySelector('#numeros app-grilla-rifa')).toBeTruthy();
     expect(el.querySelectorAll('#numeros button[data-n]')).toHaveLength(100);
   });
 
   it('rifa sorteada: lleva a resultados y no ofrece reservar', async () => {
     await montar(detalle({ estado: 'SORTEADA' }));
-    const a = (f.nativeElement as HTMLElement).querySelector('a.boton');
+    const a = (f.nativeElement as HTMLElement).querySelector('.panel a.boton');
     expect(a?.getAttribute('href')).toBe('/resultados/R-001');
     expect(texto()).not.toContain('Escoger números');
   });

@@ -3,8 +3,8 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE } from './api.service';
 import {
-  CompraAdmin, ConfirmacionManualRequest, ConfirmacionPago, EstadoCompra, Liberacion, Loteria, Pagina, Premio,
-  PremioRequest, RifaGestion, RifaRequest,
+  CompraAdmin, ConfirmacionManualRequest, ConfirmacionPago, EstadoCompra, EstadoResultado, Liberacion, Loteria, Pagina,
+  Premio, PremioRequest, ResultadoLoteria, RifaGestion, RifaRequest, SorteoLoteria,
 } from './models';
 
 /** Filtros de la cola de pagos; todo es opcional. */
@@ -59,5 +59,32 @@ export class AdminApi {
 
   liberar(codigo: string, motivo?: string): Observable<Liberacion> {
     return this.http.post<Liberacion>(`${API_BASE}/admin/compras/${encodeURIComponent(codigo)}/liberar`, motivo ? { motivo } : {});
+  }
+
+  /** Cierra las ventas (PUBLICADA → CERRADA). `/api/organizador/**`. */
+  cerrar(rifaId: number): Observable<RifaGestion> {
+    return this.http.post<RifaGestion>(`${API_BASE}/organizador/rifas/${rifaId}/cerrar`, {});
+  }
+
+  // ---- Sorteo por lotería: todo bajo /api/admin/** (solo ADMIN) ----
+
+  /** Qué ganaría cada premio con los resultados actuales; no guarda nada. */
+  previsualizarSorteo(rifaId: number): Observable<SorteoLoteria> {
+    return this.http.get<SorteoLoteria>(`${API_BASE}/admin/rifas/${rifaId}/sortear-por-loteria/previsualizar`);
+  }
+
+  /** Ejecuta el sorteo y deja la rifa SORTEADA; 409 si algo cambió. */
+  ejecutarSorteo(rifaId: number): Observable<SorteoLoteria> {
+    return this.http.post<SorteoLoteria>(`${API_BASE}/admin/rifas/${rifaId}/sortear-por-loteria`, {});
+  }
+
+  resultadosLoteria(loteriaId: number, estado?: EstadoResultado, pagina = 0, tamano = 20): Observable<Pagina<ResultadoLoteria>> {
+    let params = new HttpParams().set('pagina', pagina).set('tamano', tamano);
+    if (estado) params = params.set('estado', estado);
+    return this.http.get<Pagina<ResultadoLoteria>>(`${API_BASE}/admin/loterias/${loteriaId}/resultados`, { params });
+  }
+
+  verificarResultado(resultadoId: number): Observable<ResultadoLoteria> {
+    return this.http.post<ResultadoLoteria>(`${API_BASE}/admin/resultados-loteria/${resultadoId}/verificar`, {});
   }
 }

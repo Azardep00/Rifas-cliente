@@ -231,3 +231,69 @@ export interface Liberacion {
   boletosLiberados: number;
   liberadaEn: string;
 }
+
+/** Sorteo por lotería (CP-19): espejo de SorteoDtos y LoteriaDtos.ResultadoDto. Los números van como texto con ceros (ADR-06). */
+export type EstadoResultado = 'PENDIENTE_VERIFICACION' | 'VERIFICADO' | 'ANULADO';
+export type ResolucionPaso = 'DIRECTO' | 'ADJUDICADO_SIGUIENTE_VENDIDO' | 'REPETIDO';
+export type CausaVacante = 'NO_VENDIDO' | 'YA_GANO_OTRO_PREMIO';
+
+export interface ResultadoLoteria {
+  id: number;
+  loteriaId: number;
+  loteria: string;
+  sitioOficialUrl?: string;
+  fechaSorteo: string;
+  numeroMayor: string;
+  serie?: string;
+  numeroSorteo?: number;
+  ultimos2: string;
+  ultimos3: string;
+  ultimos4: string;
+  fuente?: string;
+  evidenciaUrl?: string;
+  notas?: string;
+  estado: EstadoResultado;
+  cargadoPor?: number;
+  creadoEn: string;
+  verificadoPor?: number;
+  verificadoEn?: string;
+  anuladoPor?: number;
+  anuladoEn?: string;
+  motivoAnulacion?: string;
+}
+
+export interface PasoLoteria {
+  posicionPremio: number;
+  resultadoId: number;
+  fechaSorteoLoteria: string;
+  numeroMayor: string;
+  numeroObjetivo: string;
+  resolucion: ResolucionPaso;
+  /** Nulo cuando la resolución es DIRECTO. */
+  causa: CausaVacante | null;
+  /** Nulo cuando la resolución es REPETIDO. */
+  numeroBoleto: string | null;
+}
+
+export interface GanadorLoteria {
+  posicionPremio: number;
+  premio: string;
+  numeroBoleto: number;
+  numeroBoletoTexto: string;
+  resultadoId: number;
+  numeroObjetivo: string;
+  adjudicadoPorVacante: boolean;
+}
+
+export interface SorteoLoteria {
+  codigoRifa: string;
+  tituloRifa: string;
+  loteria: string;
+  digitos: number;
+  reglaVacante: ReglaVacante;
+  completo: boolean;
+  ejecutado: boolean;
+  mensaje: string;
+  pasos: PasoLoteria[];
+  ganadores: GanadorLoteria[];
+}
